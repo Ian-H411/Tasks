@@ -12,13 +12,20 @@ import CoreData
 class TaskController {
     
     static let sharedInstance = TaskController()
-
-    
-    var tasks: [Task] {
-        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-        return (try? CoreDataStack.context.fetch(fetchRequest) ) ?? []
-//        return [Task(name: "eat taco bell", notes: "just do it", isComplete: false, due: Date()), Task(name: "eat more taco bell", notes: "just do it again!", isComplete: false, due: Date())]
+    var fetchedResultsController: NSFetchedResultsController<Task>
+    init(){
+        //TODO: check that nothing needs to be done regarding sectionNameK
+        let fetch: NSFetchRequest<Task> = Task.fetchRequest()
+        fetch.sortDescriptors = [NSSortDescriptor(key: "isComplete", ascending: false),NSSortDescriptor(key: "due", ascending: false)]
+        let ResultsController: NSFetchedResultsController<Task> = NSFetchedResultsController(fetchRequest: fetch, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "isComplete", cacheName: nil)
+        fetchedResultsController = ResultsController
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
+    
     
     //CRUD
     
@@ -28,7 +35,7 @@ class TaskController {
     }
     
     func deleteTask(task: Task){
-        CoreDataStack.context.delete(task)
+        task.managedObjectContext?.delete(task)
         saveToPersistentStorage()
     }
     func toggle(task:Task){

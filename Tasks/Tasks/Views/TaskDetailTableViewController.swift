@@ -56,16 +56,22 @@ class TaskDetailTableViewController: UITableViewController {
     
     @IBAction func saveButtonTapped(_ sender: Any) {
         if let task = landingPad {
-            guard let nameUnwrapped = nameTextField.text else {return}
-            guard let noteUnwrapped = noteTextField.text else {return}
-            
-            TaskController.sharedInstance.updateTask(task: task, name: nameUnwrapped, isComplete: task.isComplete, notes: noteUnwrapped, dueDate: datePicker.date)
+            updateTask(task: task)
         } else {
+            
             guard let nameUnwrapped = nameTextField.text else {return}
             guard let noteUnwrapped = noteTextField.text else {return}
             TaskController.sharedInstance.createTask(nameOfTask: nameUnwrapped, isComplete: false, notes: noteUnwrapped, dueDate: datePicker.date)
         }
         navigationController?.popViewController(animated: true)
+    }
+    
+    func updateTask(task:Task){
+        guard let nameUnwrapped = nameTextField.text else {return}
+        guard let noteUnwrapped = noteTextField.text else {return}
+        
+        TaskController.sharedInstance.updateTask(task: task, name: nameUnwrapped, isComplete: task.isComplete, notes: noteUnwrapped, dueDate: datePicker.date)
+        
     }
     
     @IBAction func cancelButtonTapped(_ sender: Any) {

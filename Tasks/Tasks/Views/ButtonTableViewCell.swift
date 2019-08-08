@@ -22,10 +22,11 @@ class ButtonTableViewCell: UITableViewCell {
     
     func updateButton(isDone: Bool){
         if isDone {
-        completeButton.imageView?.image = UIImage(named: "complete")
+            completeButton.setImage(UIImage(named: "complete"), for: .normal)
+
             
         } else {
-            completeButton.imageView?.image = UIImage(named: "inComplete")
+            completeButton.setImage(UIImage(named: "inComplete"), for: .normal)
         }
     }
     
